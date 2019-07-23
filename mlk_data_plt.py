@@ -1,0 +1,66 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Jul 23 21:02:32 2019
+
+@author: mfhhkl
+"""
+
+import time
+import numpy as np
+import pandas as pd
+from pandas import Series, DataFrame
+import matplotlib
+#matplotlib.matplotlib_fname()
+import matplotlib.pyplot as plt
+plt.rcParams['font.sans-serif']=['SimHei'] #用来正常显示中文标签
+plt.rcParams['axes.unicode_minus']=False #用来正常显示负号
+import webbrowser
+import os
+os.chdir("D://CodeWork/Mlk")
+
+mdata = pd.read_excel("mlk_data.xlsx").rename(columns={'序号':'调性'})
+mdata.columns
+'''
+Index(['调性', '话题标签', '品牌', '发布时间', '日期时间', '话题内容', '话题链接', '始发媒体', '单链接得分',
+       '话题媒体', '地域', '发布情况', '媒体类别', '媒体分级', '媒体得分', '收录情况', '收录得分', '标题（10）',
+       '首段（5）', '正文（5）', '得分', '浏览量', '评论量', '影响力得分'],
+      dtype='object')
+'''
+mdata['调性'].value_counts()
+mdata['品牌'].value_counts().plot()
+
+mdata = pd.read_excel("D://CodeWork/Mlk/mlk_data.xlsx").rename(columns={'序号':'调性'})
+
+fig = plt.figure()
+fig.set(alpha=0.2)  # 设定图表颜色alpha参数
+ 
+plt.subplot2grid((2,3),(0,0))             # 在一张大图里分列几个小图
+mdata.品牌.value_counts().plot(kind='bar')
+plt.title(u"品牌")
+plt.ylabel(u"声量")
+ 
+plt.subplot2grid((2,3),(0,1))
+mdata.调性.value_counts().plot(kind="bar")
+plt.ylabel(u"调性")
+plt.title(u"调性分布")
+ 
+plt.subplot2grid((2,3),(0,2))
+plt.scatter(mdata.媒体分级, mdata.品牌)
+plt.ylabel(u"品牌")                         
+plt.grid(b=True, which='major', axis='y')
+plt.title(u"按媒体分级看品牌声量")
+ 
+#mdata.媒体得分.value_counts()
+plt.subplot2grid((2,3),(1,0), colspan=2)
+mdata.媒体得分.plot(kind='kde')
+plt.xlabel(u"媒体得分")# plots an axis lable
+plt.ylabel(u"得分")
+plt.title(u"各媒体得分分布")
+plt.legend((u'10分', u'20分',u'30分', u'40分'),loc='best') # sets our legend for our graph.
+ 
+ 
+plt.subplot2grid((2,3),(1,2))
+mdata.单链接得分.value_counts().plot(kind='bar')
+plt.title(u"各单链接得分情况")
+plt.ylabel(u"分数")
+plt.show()
